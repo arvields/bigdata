@@ -1,17 +1,16 @@
-from dash import Dash, dcc, html, Input, Output, callback
+import dash
 import plotly.express as px
 import pandas as pd
 from dash import dcc
 from dash import html
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 import io
 import base64
-from dash import dash_table
 from dash.exceptions import PreventUpdate
 from dbfread import DBF
 
 # Initialize the Dash app
-app = Dash(__name__)
+app = dash.Dash(__name__)
 
 # Load initial data
 df = pd.read_csv('suicide-rate.csv')
@@ -22,8 +21,7 @@ country_list = [{'label': c, 'value': c} for c in df['country'].unique()]
 # App layout
 app.layout = html.Div([
     html.Div([
-        html.H1("Suicide Rate of Countries Based on Age and Sex (1986-2015)",
-                style={'textAlign': 'center'})
+        html.H1("Suicide Rate of Countries Based on Age and Sex (1986-2015)", style={'textAlign': 'center'})
     ]),
 
     # File upload section
@@ -51,12 +49,15 @@ app.layout = html.Div([
         html.Div(id='output-data-upload'),
     ]),
 
+    # Placeholder for visualizations (initially hidden)
+    html.Div(id='visualization-container', style={'display': 'none'}),
+
+    # Dropdowns and Graphs
     html.Div([
         html.Label([
             "Selected Year: ",
             dcc.Dropdown(
                 id='csv-year',
-                options=[{'label': year, 'value': year} for year in range(1986, 2016)],
                 value=2000,
                 searchable=False,
                 clearable=False,
@@ -110,7 +111,6 @@ app.layout = html.Div([
             dcc.Dropdown(
                 id='csv-country',
                 options=country_list,
-                value=['Philippines', 'South Africa', 'Brazil', 'United States', 'France', 'Australia'],
                 multi=True,
                 clearable=False,
                 style={'width': '50%'}
@@ -134,11 +134,39 @@ app.layout = html.Div([
     html.Div([
         dcc.Graph(id='csv-graph-gdp-capita')
     ]),
+
+    html.Link(rel='stylesheet', href='/assets/styles.css'),
 ])
+
+# Callback to dynamically generate year dropdown options
+@app.callback(
+    Output('csv-year', 'options'),
+    [Input('upload-data', 'contents')]
+)
+def update_year_dropdown_options(contents):
+    if contents is None:
+        raise PreventUpdate
+
+    # Parse the content of the uploaded file
+    content_type, content_string = contents.split(',')
+    try:
+        # Check if the file is a CSV
+        if 'csv' in content_type:
+            uploaded_df = pd.read_csv(io.StringIO(base64.b64decode(content_string).decode('utf-8')))
+            # Get unique years from the uploaded DataFrame
+            available_years = sorted(uploaded_df['year'].unique())
+            # Generate options for the year dropdown
+            year_options = [{'label': year, 'value': year} for year in available_years]
+            return year_options
+
+    except Exception as e:
+        print(f"Error: {e}")
+        raise PreventUpdate
 
 # Callback to update the displayed data after file upload
 @app.callback(
     [Output('output-data-upload', 'children'),
+     Output('visualization-container', 'style'),
      Output('csv-map', 'figure'),
      Output('csv-graph-suicides', 'figure'),
      Output('csv-graph-population', 'figure'),
@@ -151,6 +179,7 @@ app.layout = html.Div([
      Input('csv-country', 'value')]
 )
 def update_data(contents, selected_year, selected_age, selected_sex, selected_country):
+    print("Update Data Callback Triggered")
     if contents is None:
         raise PreventUpdate
 
@@ -159,18 +188,21 @@ def update_data(contents, selected_year, selected_age, selected_sex, selected_co
 
     # Parse the content of the uploaded file
     content_type, content_string = contents.split(',')
-    decoded = base64.b64decode(content_string)
     try:
         # Check if the file is a CSV or DBF
         if 'csv' in content_type:
-            uploaded_df = pd.read_csv(io.StringIO(decoded.decode('utf-8')))
+            uploaded_df = pd.read_csv(io.StringIO(base64.b64decode(content_string).decode('utf-8')))
         elif 'dbf' in content_type:
             # Read DBF file using dbfread
-            table = DBF(io.BytesIO(decoded))
+            table = DBF(io.BytesIO(base64.b64decode(content_string)))
             uploaded_df = pd.DataFrame(iter(table))
 
+        # Convert 'year' column to integers
+        uploaded_df['year'] = uploaded_df['year'].astype(int)
+
     except Exception as e:
-        return html.Div(['Error reading uploaded file. Please make sure it is a valid CSV or DBF file.']), {}, {}, {}, {}, {}
+        print(f"Error: {e}")
+        return html.Div(['Error reading uploaded file. Please make sure it is a valid CSV or DBF file.']), {'display': 'none'}, {}, {}, {}, {}, {}
 
     # Update the data and visualizations
     country_list = [{'label': c, 'value': c} for c in uploaded_df['country'].unique()]
@@ -182,10 +214,14 @@ def update_data(contents, selected_year, selected_age, selected_sex, selected_co
     gdp_year_fig = update_graph_gdp_year(selected_country, selected_age, selected_sex, uploaded_df)
     gdp_capita_fig = update_graph_gdp_capita(selected_country, selected_age, selected_sex, uploaded_df)
 
-    return html.Div(['File uploaded successfully!']), map_fig, suicides_fig, population_fig, gdp_year_fig, gdp_capita_fig
+    # Show visualizations only if the file has been uploaded
+    visualization_container_style = {'display': 'block'}
+
+    return html.Div(['File uploaded successfully!']), visualization_container_style, map_fig, suicides_fig, population_fig, gdp_year_fig, gdp_capita_fig
 
 # Callback functions for visualizations
 def update_map(selected_year, selected_age, selected_sex, df):
+    print("Update Map Callback Triggered")
     selected_df = df[(df.year == selected_year) &
                      (df.age == selected_age) &
                      (df.sex == selected_sex)]
@@ -212,9 +248,22 @@ def update_map(selected_year, selected_age, selected_sex, df):
     return fig
 
 def update_graph_suicide(selected_country, selected_age, selected_sex, df):
+    print("Update Graph Suicide Callback Triggered")
+
+    # Check if selected_country is None
+    if selected_country is None or len(selected_country) == 0:
+        # If None, return an empty figure or handle it as needed
+        return px.line()
+
+    # Get unique years from the uploaded DataFrame
+    available_years = sorted(df['year'].unique())
+
     selected_df = df[(df['country'].isin(selected_country)) &
                      (df.age == selected_age) &
                      (df.sex == selected_sex)]
+
+    # Round the 'year' values to ensure they are whole numbers
+    selected_df['year'] = selected_df['year'].round().astype(int)
 
     fig = px.line(selected_df,
                   x='year',
@@ -226,13 +275,27 @@ def update_graph_suicide(selected_country, selected_age, selected_sex, df):
                       'country': 'Selected Country'
                   },
                   title='No. of Suicides in a Country Based on Age and Sex',
-                  markers=True)
+                  markers=True,
+                  category_orders={'year': available_years})  # Restrict the x-axis to available years
     return fig
 
 def update_graph_population(selected_country, selected_age, selected_sex, df):
+    print("Update Graph Population Callback Triggered")
+
+    # Check if selected_country is None
+    if selected_country is None or len(selected_country) == 0:
+        # If None, return an empty figure or handle it as needed
+        return px.line()
+
+    # Get unique years from the uploaded DataFrame
+    available_years = sorted(df['year'].unique())
+
     selected_df = df[(df['country'].isin(selected_country)) &
                      (df.age == selected_age) &
                      (df.sex == selected_sex)]
+
+    # Round the 'year' values to ensure they are whole numbers
+    selected_df['year'] = selected_df['year'].round().astype(int)
 
     fig = px.line(selected_df,
                   x='year',
@@ -244,18 +307,32 @@ def update_graph_population(selected_country, selected_age, selected_sex, df):
                       'country': 'Selected Country'
                   },
                   title='Population of a Country Based on Age and Sex',
-                  markers=True)
+                  markers=True,
+                  category_orders={'year': available_years})  # Restrict the x-axis to available years
     return fig
 
 def update_graph_gdp_year(selected_country, selected_age, selected_sex, df):
-    selected_df = df.loc[(df['country'].isin(selected_country)) &
-                         (df.age == selected_age) &
-                         (df.sex == selected_sex)]
+    print("Update Graph GDP Year Callback Triggered")
+
+    # Check if selected_country is None
+    if selected_country is None or len(selected_country) == 0:
+        # If None, return an empty figure or handle it as needed
+        return px.line()
+
+    # Get unique years from the uploaded DataFrame
+    available_years = sorted(df['year'].unique())
+
+    selected_df = df[(df['country'].isin(selected_country)) &
+                     (df.age == selected_age) &
+                     (df.sex == selected_sex)]
 
     # Check if 'gdp_for_year($)' column exists in selected_df
     if 'gdp_for_year($)' not in selected_df.columns:
         # If not, adjust the column name based on your actual column names
         raise ValueError("Column 'gdp_for_year($)' not found in the DataFrame.")
+
+    # Round the 'year' values to ensure they are whole numbers
+    selected_df['year'] = selected_df['year'].round().astype(int)
 
     fig = px.line(selected_df,
                   x='year',
@@ -267,22 +344,33 @@ def update_graph_gdp_year(selected_country, selected_age, selected_sex, df):
                       'country': 'Selected Country'
                   },
                   title='Yearly Gross Domestic Product (GDP) of a Country Based on Age and Sex',
-                  markers=True)
+                  markers=True,
+                  category_orders={'year': available_years})  # Restrict the x-axis to available years
     return fig
 
 def update_graph_gdp_capita(selected_country, selected_age, selected_sex, df):
-    selected_df = df.loc[(df['country'].isin(selected_country)) &
-                         (df.age == selected_age) &
-                         (df.sex == selected_sex)]
+    print("Update Graph GDP Capita Callback Triggered")
 
-    # Print the column names for debugging purposes
-    print(f"Column names in selected_df: {selected_df.columns}")
+    # Check if selected_country is None
+    if selected_country is None or len(selected_country) == 0:
+        # If None, return an empty figure or handle it as needed
+        return px.line()
+
+    # Get unique years from the uploaded DataFrame
+    available_years = sorted(df['year'].unique())
+
+    selected_df = df[(df['country'].isin(selected_country)) &
+                     (df.age == selected_age) &
+                     (df.sex == selected_sex)]
 
     # Check if 'gdp_per_capita($)' column exists in selected_df
     if 'gdp_per_capita($)' not in selected_df.columns:
         # Print the actual column names in the DataFrame
         print(f"Actual column names in the DataFrame: {df.columns}")
         raise ValueError("Column 'gdp_per_capita($)' not found in the DataFrame.")
+
+    # Round the 'year' values to ensure they are whole numbers
+    selected_df['year'] = selected_df['year'].round().astype(int)
 
     fig = px.line(selected_df,
                   x='year',
@@ -294,7 +382,8 @@ def update_graph_gdp_capita(selected_country, selected_age, selected_sex, df):
                       'country': 'Selected Country'
                   },
                   title='Yearly Gross Domestic Product (GDP) per Capita of a Country Based on Age and Sex',
-                  markers=True)
+                  markers=True,
+                  category_orders={'year': available_years})  # Restrict the x-axis to available years
     return fig
 
 # Run the app

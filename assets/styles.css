@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Visualization</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Arial, sans-serif';
+            background-color: #f5f5f5;
+        }
+
+        /* Header Styles */
+        h1 {
+            color: #3366cc;
+            font-size: 28px;
+        }
+
+        /* Upload Section Styles */
+        #upload-data {
+            margin-top: 20px;
+        }
+
+        /* Visualization Container Styles */
+        #visualization-container {
+            display: none;
+        }
+
+        /* Dropdown and Graph Styles */
+        label {
+            display: block;
+            margin: 10px 0;
+        }
+
+        /* Graph Styles */
+        .graph-container {
+            margin-top: 20px;
+        }
+
+        /* Footer Styles */
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #888888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Data Visualization</h1>
+
+        <!-- Upload Section -->
+        <div id="upload-data">
+            <!-- Upload Form Here -->
+        </div>
+
+        <!-- Visualization Container -->
+        <div id="visualization-container">
+            <!-- Visualization Elements Here -->
+        </div>
+
+        <!-- Dropdown and Graph Styles -->
+        <label>
+            <!-- Dropdown Here -->
+        </label>
+        <div class="graph-container">
+            <!-- Graph Here -->
+        </div>
+
+        <!-- Footer -->
+        <div class="footer text-center">
+            <p>&copy; 2021 Data Visualization. All rights reserved.</p>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</body>
+</html>
