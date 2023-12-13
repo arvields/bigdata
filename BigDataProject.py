@@ -216,7 +216,7 @@ def update_data(contents, selected_year, selected_age, selected_sex, selected_co
 
     except Exception as e:
         print(f"Error: {e}")
-        return html.Div(['Error reading uploaded file. Please make sure it is a valid CSV or DBF file.']), {'display': 'none'}, {}, {}, {}, {}, {}
+        return html.Div(['Error reading uploaded file. Please make sure it is a valid CSV or DBF file.']), {'display': 'none'}, {}, {}, {}, {}, {}, {}
 
     # Update the data and visualizations
     country_list = [{'label': c, 'value': c} for c in uploaded_df['country'].unique()]
@@ -231,8 +231,10 @@ def update_data(contents, selected_year, selected_age, selected_sex, selected_co
     # Show visualizations only if the file has been uploaded
     visualization_container_style = {'display': 'block'}
 
-    return html.Div(['File uploaded successfully!']), visualization_container_style, map_fig, suicides_fig, population_fig, gdp_year_fig, gdp_capita_fig, predict_graph_suicide_rate(selected_country, selected_age, selected_sex)
+    # Pass df to predict_graph_suicide_rate
+    predict_suicide_rate_fig = predict_graph_suicide_rate(selected_country, selected_age, selected_sex, uploaded_df)
 
+    return html.Div(['File uploaded successfully!']), visualization_container_style, map_fig, suicides_fig, population_fig, gdp_year_fig, gdp_capita_fig, predict_suicide_rate_fig
 
 # Callback functions for visualizations
 def update_map(selected_year, selected_age, selected_sex, df):
@@ -402,7 +404,7 @@ def update_graph_gdp_capita(selected_country, selected_age, selected_sex, df):
                   category_orders={'year': available_years})  # Restrict the x-axis to available years
     return fig
 
-def predict_graph_suicide_rate(selected_country, selected_age, selected_sex):
+def predict_graph_suicide_rate(selected_country, selected_age, selected_sex, df):
     if selected_country is None or len(selected_country) == 0:
         # Handle the case where no country is selected
         return px.scatter(labels={'year': 'Year', 'suicides_no': 'No. of Suicides', 'country': 'Selected Country'},
@@ -410,7 +412,12 @@ def predict_graph_suicide_rate(selected_country, selected_age, selected_sex):
 
     selected_df = df.loc[(df['country'].isin(selected_country)) &
                          (df.age == selected_age) &
-                         (df.sex == selected_sex)]
+                         (df.sex == selected_sex)].copy()  # Use copy() to avoid SettingWithCopyWarning
+
+    # Check if 'year' column exists in selected_df
+    if 'year' not in selected_df.columns:
+        # If not, you need to create it based on the year values in the original DataFrame
+        selected_df['year'] = selected_df['year'].round().astype(int)
 
     fig = px.scatter(selected_df,
                      x='year',
