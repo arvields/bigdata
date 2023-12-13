@@ -49,8 +49,8 @@ app.layout = html.Div([
         html.Div(id='output-data-upload'),
     ]),
 
-    # Placeholder for visualizations (initially hidden)
-    html.Div(id='visualization-container', style={'display': 'none'}),
+    # Placeholder for visualizations (visible by default)
+    html.Div(id='visualization-container', style={'display': 'block'}),
 
     # Dropdowns and Graphs
     html.Div([
@@ -135,6 +135,19 @@ app.layout = html.Div([
         dcc.Graph(id='csv-graph-gdp-capita')
     ]),
 
+    html.Div([
+        html.Hr()
+    ]),
+
+    html.Div([
+        html.H2("Predicted Rates ",
+                style={'textAlign': 'center'})
+    ]),
+
+    html.Div([
+        dcc.Graph(id='csv-graph-predict-suicide-rate')
+    ]),
+
     html.Link(rel='stylesheet', href='/assets/styles.css'),
 ])
 
@@ -171,7 +184,8 @@ def update_year_dropdown_options(contents):
      Output('csv-graph-suicides', 'figure'),
      Output('csv-graph-population', 'figure'),
      Output('csv-graph-gdp-year', 'figure'),
-     Output('csv-graph-gdp-capita', 'figure')],
+     Output('csv-graph-gdp-capita', 'figure'),
+     Output('csv-graph-predict-suicide-rate', 'figure')],
     [Input('upload-data', 'contents'),
      Input('csv-year', 'value'),
      Input('csv-age', 'value'),
@@ -217,7 +231,8 @@ def update_data(contents, selected_year, selected_age, selected_sex, selected_co
     # Show visualizations only if the file has been uploaded
     visualization_container_style = {'display': 'block'}
 
-    return html.Div(['File uploaded successfully!']), visualization_container_style, map_fig, suicides_fig, population_fig, gdp_year_fig, gdp_capita_fig
+    return html.Div(['File uploaded successfully!']), visualization_container_style, map_fig, suicides_fig, population_fig, gdp_year_fig, gdp_capita_fig, predict_graph_suicide_rate(selected_country, selected_age, selected_sex)
+
 
 # Callback functions for visualizations
 def update_map(selected_year, selected_age, selected_sex, df):
@@ -384,6 +399,30 @@ def update_graph_gdp_capita(selected_country, selected_age, selected_sex, df):
                   title='Yearly Gross Domestic Product (GDP) per Capita of a Country Based on Age and Sex',
                   markers=True,
                   category_orders={'year': available_years})  # Restrict the x-axis to available years
+    return fig
+
+
+def predict_graph_suicide_rate(selected_country, selected_age, selected_sex):
+    if selected_country is None or len(selected_country) == 0:
+        # Handle the case where no country is selected
+        return px.scatter(labels={'year': 'Year', 'suicides_no': 'No. of Suicides', 'country': 'Selected Country'},
+                          title='Predicted Projection of Suicides Based on Age and Sex', trendline='ols')
+
+    selected_df = df.loc[(df['country'].isin(selected_country)) &
+                         (df.age == selected_age) &
+                         (df.sex == selected_sex)]
+
+    fig = px.scatter(selected_df,
+                     x='year',
+                     y='suicides_no',
+                     color='country',
+                     labels={
+                         'year': 'Year',
+                         'suicides_no': 'No. of Suicides',
+                         'country': 'Selected Country'
+                     },
+                     title='Predicted Projection of Suicides Based on Age and Sex',
+                     trendline='ols')
     return fig
 
 # Run the app
