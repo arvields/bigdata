@@ -294,6 +294,7 @@ def update_graph_suicide(selected_country, selected_age, selected_sex, df):
                   category_orders={'year': available_years})  # Restrict the x-axis to available years
     return fig
 
+# Callback functions for visualizations
 def update_graph_population(selected_country, selected_age, selected_sex, df):
     print("Update Graph Population Callback Triggered")
 
@@ -305,9 +306,9 @@ def update_graph_population(selected_country, selected_age, selected_sex, df):
     # Get unique years from the uploaded DataFrame
     available_years = sorted(df['year'].unique())
 
-    selected_df = df[(df['country'].isin(selected_country)) &
-                     (df.age == selected_age) &
-                     (df.sex == selected_sex)]
+    selected_df = df.loc[(df['country'].isin(selected_country)) &
+                         (df.age == selected_age) &
+                         (df.sex == selected_sex)].copy()  # Use copy() to avoid SettingWithCopyWarning
 
     # Round the 'year' values to ensure they are whole numbers
     selected_df['year'] = selected_df['year'].round().astype(int)
@@ -337,9 +338,9 @@ def update_graph_gdp_year(selected_country, selected_age, selected_sex, df):
     # Get unique years from the uploaded DataFrame
     available_years = sorted(df['year'].unique())
 
-    selected_df = df[(df['country'].isin(selected_country)) &
-                     (df.age == selected_age) &
-                     (df.sex == selected_sex)]
+    selected_df = df.loc[(df['country'].isin(selected_country)) &
+                         (df.age == selected_age) &
+                         (df.sex == selected_sex)].copy()  # Use copy() to avoid SettingWithCopyWarning
 
     # Check if 'gdp_for_year($)' column exists in selected_df
     if 'gdp_for_year($)' not in selected_df.columns:
@@ -374,9 +375,9 @@ def update_graph_gdp_capita(selected_country, selected_age, selected_sex, df):
     # Get unique years from the uploaded DataFrame
     available_years = sorted(df['year'].unique())
 
-    selected_df = df[(df['country'].isin(selected_country)) &
-                     (df.age == selected_age) &
-                     (df.sex == selected_sex)]
+    selected_df = df.loc[(df['country'].isin(selected_country)) &
+                         (df.age == selected_age) &
+                         (df.sex == selected_sex)].copy()  # Use copy() to avoid SettingWithCopyWarning
 
     # Check if 'gdp_per_capita($)' column exists in selected_df
     if 'gdp_per_capita($)' not in selected_df.columns:
@@ -400,7 +401,6 @@ def update_graph_gdp_capita(selected_country, selected_age, selected_sex, df):
                   markers=True,
                   category_orders={'year': available_years})  # Restrict the x-axis to available years
     return fig
-
 
 def predict_graph_suicide_rate(selected_country, selected_age, selected_sex):
     if selected_country is None or len(selected_country) == 0:
