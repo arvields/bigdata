@@ -6,7 +6,9 @@ Mecico, Cherry Grace
 Ursabia, Carl Gian
 
 Project Description
-The primary goal of this project is to conduct an in-depth analysis of global suicide rates from 1986 to 2015, with a specific focus on age and sex distribution. The dataset is provided in both CSV and DBF file formats, and the analysis involves loading and processing this data to derive meaningful insights. The dataset is available in two formats: CSV and DBF. Both files contain identical information regarding suicide rates across various countries, differentiated by age and sex. Python serves as the primary programming language for this project, with essential libraries such as pandas, plotly, and dash utilized for data manipulation and visualization. Jupyter Notebooks are employed for creating an interactive and informative platform for presenting the analysis.
+The primary goal of this project is to conduct an in-depth analysis of global suicide rates from 1986 to 2015, with a specific focus on age and sex distribution. It aims to unravel how age and sex distribution may influence and interact with population dynamics and economic conditions, ultimately impacting suicide rates across different countries. The primary objectives are to visualize and analyze how age and sex demographics relate to population distribution, yearly GDP, and GDP per capita, with a focus on their potential connections to variations in suicide rates.
+
+The dataset is provided in both CSV and DBF file formats, and the analysis involves loading and processing this data to derive meaningful insights. Both files contain identical information regarding suicide rates across various countries, differentiated by age and sex. Python serves as the primary programming language for this project, with essential libraries such as pandas, plotly, and dash utilized for data manipulation and visualization. 
 
 Implemented Features
 1. Data Cleaning and Preprocessing: The dataset undergoes thorough cleaning and preprocessing activities before being loaded into the analysis environment. This step includes handling missing values, correcting data types, and ensuring data consistency.
@@ -14,35 +16,35 @@ Implemented Features
 2. Data Loading: Cleaned and preprocessed data from both CSV and DBF files are loaded into pandas dataframes to facilitate subsequent analysis.
 
 3. Descriptive Analysis: 
- - Number of Suicides per Country based on Age and Sex
+ - Number of Suicides per Country based on Age and Sex:
     This section explores the number of suicides per country, considering the breakdown by age and sex. The goal is to understand how suicide rates vary across different demographics.
 
-    Analysis Steps    
+    Analysis Steps:    
     1. Group the data by country, age, and sex.
     2. Calculate the total number of suicides for each group.
     3. Visualize the trends using a line graph.
 
- - Population by Country based on Age and Sex
+ - Population by Country based on Age and Sex:
     Similar to the previous section, this analysis focuses on the population, considering the breakdown by age and sex.
 
-    Analysis Steps
+    Analysis Steps:
     1. Group the data by country, age, and sex.
     2. Calculate the total population for each group.
     3. Visualize the trends using a line graph.    
 
- - Yearly Gross Domestic Product (GDP) of a Country based on Age and Sex
+ - Yearly Gross Domestic Product (GDP) of a Country based on Age and Sex:
     This analysis focuses on the yearly Gross Domestic Product (GDP) of a country, considering the breakdown by age and sex.
 
-    Analysis Steps
+    Analysis Steps:
     1. Group the data by country, age, and sex.
     2. Calculate the total GDP for each group for each year.
     3. Visualize the trends using a line graph.
 
 
- - Yearly Gross Domestic Product (GDP) per Capita based on Age and Sex
+ - Yearly Gross Domestic Product (GDP) per Capita based on Age and Sex:
     Similar to the previous section, this analysis focuses on the yearly Gross Domestic Product (GDP) per capita of a country, considering the breakdown by age and sex.
 
-    Analysis Steps
+    Analysis Steps:
     1. Group the data by country, age, and sex.
     2. Calculate the GDP per capita for each group for each year.
     3. Visualize the trends using a line graph.
@@ -52,7 +54,7 @@ Implemented Features
 - Predicted Projection on Suicides based on Age and Sex
     This analysis involves building a predictive model to project future suicides based on age and sex. The goal is to visualize the projected suicide rates against the actual rates.      
 
-    Analysis Steps
+    Analysis Steps:
     1. Select relevant features for prediction (e.g., age, sex).
     2. Split the dataset into training and testing sets.
     3. Choose a predictive model (e.g., linear regression, time series model).
@@ -62,12 +64,12 @@ Implemented Features
 
 
 
-Dataset Information
+Dataset Information--
     Dataset Name: Suicide Rate Dataset
     Time Range: 1986 to 2015
     File Formats: CSV and DBF   
 
-Attributes
+Attributes--
 1. country
 Description: The name of the country.
 Data Type: String
@@ -108,9 +110,6 @@ Data Type: Integer
 Description: Gross Domestic Product (GDP) per capita for the specified year.
 Data Type: Integer
 
-11. generation
-Description: The generation to which the demographic group belongs.
-Data Type: String
 
 Programming Language and Libraries
     Programming Language: 
