@@ -1,9 +1,9 @@
 Suicide Rate of Countries Based on Age and Sex (1986-2015)
 
 Contributors: 
-Delos Santos, Arviel 
-Mecico, Cherry Grace
-Ursabia, Carl Gian
+Arviel Delos Santos,
+Cherry Grace Medico,
+Carl Gian Ursabia
 
 Project Description
 The primary goal of this project is to conduct an in-depth analysis of global suicide rates from 1986 to 2015, with a specific focus on age and sex distribution. It aims to unravel how age and sex distribution may influence and interact with population dynamics and economic conditions, ultimately impacting suicide rates across different countries. The primary objectives are to visualize and analyze how age and sex demographics relate to population distribution, yearly GDP, and GDP per capita, with a focus on their potential connections to variations in suicide rates.
