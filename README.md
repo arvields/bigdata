@@ -2,9 +2,9 @@ Suicide Rate of Countries Based on Age and Sex (1986-2015)
 
 Contributors: 
 
-Delos Santos, Arviel
-Medico, Cherry Grace
-Ursabia, Carl Gian
+* Delos Santos, Arviel
+* Medico, Cherry Grace
+* Ursabia, Carl Gian
 
 Project Description:
 
