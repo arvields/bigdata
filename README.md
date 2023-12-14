@@ -132,7 +132,11 @@ Step 1: Run the BigDataProject.py script in PyCharm or Visual Studio Code. Ensur
  *      Debug mode: on
 
 Step 2: Click on the provided link to access the system.
+
 Step 3: Navigate to "Upload CSV File" and upload the suicide-rate.csv file by dragging or selecting it.
+
 Step 4: Explore the choropleth map by selecting the year, age-range, or sex to visualize specific data points.
+
 Step 5: Scroll down to select one or multiple countries to visualize using the Line Graph.
+
 Step 6: Explore the system to gain a deeper understanding of the project.
