@@ -1,4 +1,4 @@
-Suicide Rate of Countries Based on Age and Sex (1986-2015)
+**Suicide Rate of Countries Based on Age and Sex (1986-2015)**
 
 Contributors: 
 
@@ -6,13 +6,12 @@ Contributors:
 * Medico, Cherry Grace
 * Ursabia, Carl Gian
 
-Project Description:
-
+**Project Description**
 The primary goal of this project is to conduct an in-depth analysis of global suicide rates from 1986 to 2015, with a specific focus on age and sex distribution. It aims to unravel how age and sex distribution may influence and interact with population dynamics and economic conditions, ultimately impacting suicide rates across different countries. The primary objectives are to visualize and analyze how age and sex demographics relate to population distribution, yearly GDP, and GDP per capita, with a focus on their potential connections to variations in suicide rates.
 
 The dataset is provided in a .csv file format, and the analysis involves loading and processing this data to derive meaningful insights. The .csv file contains identical information regarding suicide rates across various countries, differentiated by age and sex. Python serves as the primary programming language for this project, with essential libraries such as pandas, plotly, and dash utilized for data manipulation and visualization. 
 
-Implemented Features
+**Implemented Features**
 1. Data Cleaning and Preprocessing: The dataset undergoes thorough cleaning and preprocessing activities before being loaded into the analysis environment. This step includes handling missing values, correcting data types, and ensuring data consistency.
 
 2. Data Loading: Cleaned and preprocessed data from a .csv file are loaded into pandas dataframes to facilitate subsequent analysis.
@@ -68,12 +67,12 @@ Implemented Features
 
 
 
-Dataset Information--
+**Dataset Information**
     Dataset Name: Suicide Rate Dataset
     Time Range: 1986 to 2015
     File Formats: CSV   
 
-Attributes--
+**Attributes**
 1. country
 Description: The name of the country.
 Data Type: String
@@ -115,7 +114,7 @@ Description: Gross Domestic Product (GDP) per capita for the specified year.
 Data Type: Integer
 
 
-Programming Language and Libraries
+**Programming Language and Libraries**
     Programming Language: 
         Python
     Libraries:
@@ -123,7 +122,7 @@ Programming Language and Libraries
         plotly: Employed for interactive and dynamic data visualizations.
         dash: Utilized for creating an interactive web-based platform for presenting the analysis.
 
-Deployment Instructions
+**Deployment Instructions**
 
 Step 1: Run the BigDataProject.py script in PyCharm or Visual Studio Code. Ensure you have the required libraries installed (dash, plotly, and pandas).
     Dash is running on http://127.0.0.1:8050/
