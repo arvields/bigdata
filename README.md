@@ -1,21 +1,22 @@
 Suicide Rate of Countries Based on Age and Sex (1986-2015)
 
 Contributors: 
-Arviel Delos Santos,
-Cherry Grace Medico,
+Arviel Delos Santos
+Cherry Grace Medico
 Carl Gian Ursabia
 
 Project Description
 The primary goal of this project is to conduct an in-depth analysis of global suicide rates from 1986 to 2015, with a specific focus on age and sex distribution. It aims to unravel how age and sex distribution may influence and interact with population dynamics and economic conditions, ultimately impacting suicide rates across different countries. The primary objectives are to visualize and analyze how age and sex demographics relate to population distribution, yearly GDP, and GDP per capita, with a focus on their potential connections to variations in suicide rates.
 
-The dataset is provided in both CSV and DBF file formats, and the analysis involves loading and processing this data to derive meaningful insights. Both files contain identical information regarding suicide rates across various countries, differentiated by age and sex. Python serves as the primary programming language for this project, with essential libraries such as pandas, plotly, and dash utilized for data manipulation and visualization. 
+The dataset is provided in a .csv file format, and the analysis involves loading and processing this data to derive meaningful insights. The .csv file contains identical information regarding suicide rates across various countries, differentiated by age and sex. Python serves as the primary programming language for this project, with essential libraries such as pandas, plotly, and dash utilized for data manipulation and visualization. 
 
 Implemented Features
 1. Data Cleaning and Preprocessing: The dataset undergoes thorough cleaning and preprocessing activities before being loaded into the analysis environment. This step includes handling missing values, correcting data types, and ensuring data consistency.
 
-2. Data Loading: Cleaned and preprocessed data from both CSV and DBF files are loaded into pandas dataframes to facilitate subsequent analysis.
+2. Data Loading: Cleaned and preprocessed data from a .csv file are loaded into pandas dataframes to facilitate subsequent analysis.
 
-3. Descriptive Analysis: 
+3. Descriptive Analysis: These visualizations will help you gain insights into the relationships between suicide rates, and economic indicators between age and sex over time and across countries.
+
  - Number of Suicides per Country based on Age and Sex:
     This section explores the number of suicides per country, considering the breakdown by age and sex. The goal is to understand how suicide rates vary across different demographics.
 
@@ -50,7 +51,8 @@ Implemented Features
     3. Visualize the trends using a line graph.
 
 
-4. Predictive Modeling: 
+4. Predictive Modeling: Make predictions using the trained OLS model on the testing set.
+
 - Predicted Projection on Suicides based on Age and Sex
     This analysis involves building a predictive model to project future suicides based on age and sex. The goal is to visualize the projected suicide rates against the actual rates.      
 
@@ -67,7 +69,7 @@ Implemented Features
 Dataset Information--
     Dataset Name: Suicide Rate Dataset
     Time Range: 1986 to 2015
-    File Formats: CSV and DBF   
+    File Formats: CSV   
 
 Attributes--
 1. country
@@ -120,3 +122,15 @@ Programming Language and Libraries
         dash: Utilized for creating an interactive web-based platform for presenting the analysis.
 
 Deployment Instructions
+
+Step 1: Run the BigDataProject.py script in PyCharm or Visual Studio Code. Ensure you have the required libraries installed (dash, plotly, and pandas).
+    Dash is running on http://127.0.0.1:8050/
+
+ *      Serving Flask app 'BigDataProject'
+ *      Debug mode: on
+
+Step 2: Click on the provided link to access the system.
+Step 3: Navigate to "Upload CSV File" and upload the suicide-rate.csv file by dragging or selecting it.
+Step 4: Explore the choropleth map by selecting the year, age-range, or sex to visualize specific data points.
+Step 5: Scroll down to select one or multiple countries to visualize using the Line Graph.
+Step 6: Explore the system to gain a deeper understanding of the project.
